@@ -121,6 +121,7 @@ class Ecdsa(object):
         return private_key, public_key
     
     def public_key(self, public_key):
+        """ Format and return uncompressed public key. """
         x = str(hex(public_key[0]))[2:]
         y = str(hex(public_key[1]))[2:]
         return "04" + x + y
