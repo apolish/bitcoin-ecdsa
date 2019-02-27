@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import time
-import collections
 import bitcoin.ecdsa as BitcoinEcdsa
 
 def main():
