@@ -19,7 +19,7 @@ def main():
     print("Public key:")
     print("  x = %s" % str(hex(x))[2:]) # 'x-coordinate' of bitcoin public key.
     print("  y = %s" % str(hex(y))[2:]) # 'y-coordinate' of bitcoin public key.
-    print("  Q = %s" % Q) # 'pubKey' (uncompresed bitcoin public key) in bitcoin transaction.
+    print("  Q = %s" % Q) # 'pubKey' (uncompressed bitcoin public key) in bitcoin transaction.
     time_spent = time.time() - time_start
     print("Spent time: %.3f sec." % time_spent)
 
