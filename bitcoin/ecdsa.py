@@ -31,7 +31,7 @@ class Ecdsa(object):
         )
     
     def __inverse_mod(self, k, p):
-        """ Returns the inverse of [k] modulo [p].
+        """ Return the inverse of [k] modulo [p].
         This function returns the only integer [x] such that (x * k) % p == 1.
         [k] must be non-zero and [p] must be a prime. """
         if k == 0:
@@ -62,7 +62,7 @@ class Ecdsa(object):
         return (y**2 - x**3 - self.__curve.a * x - self.__curve.b) % self.__curve.p == 0
     
     def __point_neg(self, point):
-        """ Returns -point. """
+        """ Return -point. """
         if point is None:
             # -0 = 0
             return None
@@ -71,7 +71,7 @@ class Ecdsa(object):
         return result
     
     def __point_add(self, point1, point2):
-        """ Returns the result of point1 + point2 according to the group law. """
+        """ Return the result of point1 + point2 according to the group law. """
         if point1 is None:
             # 0 + point2 = point2
             return point2
@@ -95,7 +95,7 @@ class Ecdsa(object):
         return result
 
     def __scalar_multiply(self, k, point):
-        """ Returns k * point computed using the double and point_add algorithm. """
+        """ Return [k * point] computed using the double and point_add algorithm. """
         if k % self.__curve.n == 0 or point is None:
             return None
         if k < 0:
@@ -114,7 +114,7 @@ class Ecdsa(object):
         return result
 
     def make_keypair(self, private_key = 0):
-        """ Generates a random private-public key pair. """
+        """ Generate a random private-public key pair. """
         if private_key == 0:
             private_key = random.randrange(1, self.__curve.n - 1)
         public_key = self.__scalar_multiply(private_key, self.__curve.g)
@@ -127,9 +127,9 @@ class Ecdsa(object):
         return "04" + x + y
 
     def __hash_message(self, message):
-        """ Returns the truncated SHA521 hash of the message. """
+        """ Return the truncated SHA521 hash of the message. """
         message_hash = hashlib.sha512(message).digest()
-        e = int.from_bytes(message_hash, 'big')
+        e = int.from_bytes(message_hash, "big")
         # FIPS 180 says that when a hash needs to be truncated, the rightmost bits
         # should be discarded.
         z = e >> (e.bit_length() - self.__curve.n.bit_length())
@@ -146,7 +146,8 @@ class Ecdsa(object):
                 k = random.randrange(1, self.__curve.n - 1)
             x, _ = self.__scalar_multiply(k, self.__curve.g) # _:y
             r = x % self.__curve.n
-            s = ((z + r * private_key) * self.__inverse_mod(k, self.__curve.n)) % self.__curve.n
+            c = self.__inverse_mod(k, self.__curve.n)
+            s = ((z + r * private_key) * c) % self.__curve.n
         return (r, s, z)
 
     def verify_signature(self, public_key, signature):
